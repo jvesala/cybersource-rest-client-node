@@ -16,10 +16,10 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['superagent', 'querystring'], factory);
+    define(['superagent', 'superagent-proxy', 'querystring'], factory);
   } else if (typeof module === 'object' && module.exports) {
     // CommonJS-like environments that support module.exports, like Node.
-    module.exports = factory(require('superagent'), require('querystring'));
+    module.exports = factory(require('superagent'),  require('superagent-proxy'), require('querystring'));
   } else {
     // Browser globals (root is window)
     if (!root.CyberSource) {
@@ -448,7 +448,23 @@
 
     var _this = this;
     var url = this.buildUrl(path, pathParams);
-    var request = superagent(httpMethod, url);
+    var useProxy = this.merchantConfig.getUseProxy();
+    var proxyAddress = this.merchantConfig.getProxyAddress();
+	var proxyPort = this.merchantConfig.getProxyPort();
+	var proxyUser = this.merchantConfig.getProxyUser();
+    var proxyPassword = this.merchantConfig.getProxyPassword();
+    
+    if (useProxy && (proxyAddress != null && proxyAddress != '')) {
+    require('superagent-proxy')(require('superagent'));
+    }
+    var request = superagent(httpMethod, url);    
+    
+    if (useProxy && (proxyAddress != null && proxyAddress != '')) {
+      if ((proxyUser != null && proxyUser != '') && (proxyPassword!= null && proxyPassword != '')) {
+        var proxy  = process.env.http_proxy || 'http://' + proxyUser + ':' + proxyPassword + '@' + proxyAddress + ':' + proxyPort;        
+        request.proxy(proxy); 
+      }
+    }
 
     // apply authentications
     this.applyAuthToRequest(request, authNames);
