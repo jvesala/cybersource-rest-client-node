@@ -453,17 +453,20 @@
 	var proxyPort = this.merchantConfig.getProxyPort();
 	var proxyUser = this.merchantConfig.getProxyUser();
     var proxyPassword = this.merchantConfig.getProxyPassword();
-    
+    var request = superagent(httpMethod, url);
+    console.log(useProxy);
     if (useProxy && (proxyAddress != null && proxyAddress != '')) {
-    require('superagent-proxy')(require('superagent'));
-    }
-    var request = superagent(httpMethod, url);    
-    
-    if (useProxy && (proxyAddress != null && proxyAddress != '')) {
+      require('superagent-proxy')(require('superagent'));
+      var request = superagent(httpMethod, url);  
       if ((proxyUser != null && proxyUser != '') && (proxyPassword!= null && proxyPassword != '')) {
-        var proxy  = process.env.http_proxy || 'http://' + proxyUser + ':' + proxyPassword + '@' + proxyAddress + ':' + proxyPort;        
-        request.proxy(proxy); 
+        var proxy  = process.env.http_proxy || 'http://' + proxyUser + ':' + proxyPassword + '@' + proxyAddress + ':' + proxyPort;
+        console.log(proxy)
+        
       }
+      else {
+        var proxy  = process.env.http_proxy || 'http://' +  proxyAddress + ':' + proxyPort;
+      }
+      request.proxy(proxy); 
     }
 
     // apply authentications
