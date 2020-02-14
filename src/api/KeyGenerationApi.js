@@ -88,7 +88,7 @@
       var returnType = FlexV1KeysPost200Response;
 
       return this.apiClient.callApi(
-        '/flex/v1/keys', 'POST',
+        '/flex/v1/keys?format=JWT', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, callback
       );
