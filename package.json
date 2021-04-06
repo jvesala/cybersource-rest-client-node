@@ -11,14 +11,14 @@
     "fs": false
   },
   "dependencies": {
+    "cybersource-rest-auth": "0.0.4",
     "jwk-to-pem": "2.0.3",
     "superagent": "3.8.3",
-    "superagent-proxy": "^2.0.0",
-    "cybersource-rest-auth": "0.0.4"
+    "superagent-proxy": "^2.0.0"
   },
   "devDependencies": {
-    "mocha": "~5.2.0",
     "@sinonjs/formatio": "3.0.0",
-    "expect.js": "~0.3.1"
+    "expect.js": "~0.3.1",
+    "mocha": "~5.2.0"
   }
 }
